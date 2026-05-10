@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import emailjs from "@emailjs/browser";
-import { Copy, Volume2, VolumeX, Mail, Phone, MapPin, Link, Download, Eye, User, Briefcase, FileText } from "lucide-react";
+import { Copy, Volume2, VolumeX, Mail, Phone, MapPin, Link, Download, Eye, User, Briefcase, FileText, ChevronLeft, ChevronRight } from "lucide-react";
 import { projects, skills, testimonials } from "@/data/portfolio";
 import CinematicModelViewer from "@/components/ui/CinematicModelViewer";
 import { VideoPlayer } from "@/components/ui/VideoPlayer";
@@ -42,7 +42,21 @@ export default function HomeExperience() {
   
   const sectionsRef = useRef([]);
   const vantaRef = useRef(null);
+  const projectsContainerRef = useRef(null);
   const marqueeItems = useMemo(() => [...testimonials, ...testimonials], []);
+
+  // Scroll functions for navigation arrows
+  const scrollProjectsLeft = () => {
+    if (projectsContainerRef.current) {
+      projectsContainerRef.current.scrollBy({ left: -420, behavior: 'smooth' });
+    }
+  };
+
+  const scrollProjectsRight = () => {
+    if (projectsContainerRef.current) {
+      projectsContainerRef.current.scrollBy({ left: 420, behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     const revealAnimations = [];
@@ -168,6 +182,10 @@ export default function HomeExperience() {
               <motion.a
                 href="#projects"
                 onClick={triggerButtonClickAnimation}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.8 }}
+                transition={{ duration: 0.6, delay: 0.2 }}
                 whileHover={{ 
                   scale: 1.05,
                   boxShadow: "0 0 25px rgba(34,211,238,0.4)"
@@ -180,6 +198,10 @@ export default function HomeExperience() {
               <motion.a
                 href="#contact"
                 onClick={triggerButtonClickAnimation}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.8 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
                 whileHover={{ 
                   scale: 1.05,
                   boxShadow: "0 0 25px rgba(168,85,247,0.4)",
@@ -217,7 +239,31 @@ export default function HomeExperience() {
       <section id="projects" ref={(el) => (sectionsRef.current[0] = el)} className="px-6 md:px-12">
         <h2 className="section-title">Featured Projects</h2>
         <p className="section-subtitle mt-4">Interactive cinematic cards with depth, glow, and quick preview motion.</p>
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+        <div className="relative">
+          {/* Left Arrow */}
+          <motion.button
+            onClick={scrollProjectsLeft}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 -translate-x-12 rounded-full bg-black/80 backdrop-blur-md p-3 text-white shadow-lg border border-white/20 hover:bg-black/90 transition-colors"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </motion.button>
+
+          {/* Right Arrow */}
+          <motion.button
+            onClick={scrollProjectsRight}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 translate-x-12 rounded-full bg-black/80 backdrop-blur-md p-3 text-white shadow-lg border border-white/20 hover:bg-black/90 transition-colors"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </motion.button>
+
+          <div 
+            ref={projectsContainerRef}
+            className="mt-10 flex gap-6 overflow-x-auto pb-4 scrollbar-hide"
+          >
           {projects.map((project) => (
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -233,7 +279,7 @@ export default function HomeExperience() {
                 document.body.style.overflow = 'hidden';
                 setModalProject(project);
               }}
-              className="glass-card group rounded-3xl p-6 text-left transition hover:shadow-neon cursor-pointer"
+              className="glass-card group rounded-3xl p-6 text-left transition hover:shadow-neon cursor-pointer flex-shrink-0 w-[400px]"
             >
               <div className="mb-5 rounded-2xl overflow-hidden bg-black transition group-hover:scale-[1.02] cursor-pointer h-0 pb-[56.25%] relative">
                 <div className="absolute inset-0">
@@ -250,6 +296,7 @@ export default function HomeExperience() {
               <p className="mt-4 text-xs text-violet-300">{project.software}</p>
             </motion.div>
           ))}
+          </div>
         </div>
       </section>
 
@@ -409,8 +456,8 @@ export default function HomeExperience() {
                     </motion.div>
                     <h3 className="mb-3 text-2xl font-semibold text-white">Professional Resume</h3>
                     <p className="mb-6 text-sm text-white/70 leading-relaxed">
-                      7+ years of experience in cinematic video editing, motion graphics, and creative direction. 
-                      Worked with Fortune 500 brands and innovative startups.
+                      Worked on over 20+ projects in cinematic video editing, motion graphics, and creative direction. 
+                      Collaborated with various brands and innovative startups.
                     </p>
                     <div className="flex flex-wrap gap-3">
                       <span className="rounded-full border border-violet-400/30 bg-violet-400/10 px-3 py-1 text-xs text-violet-300">
